@@ -13,6 +13,7 @@
 //   ["20","21","22","23"],
 //   ["30","31","32","33"]
 // ]
+console.log('initializeBoard',initializeBoard(4,4)) // @ 왜 정의된 함수보다 상단에 있어야 제대로 출력되는지?
 
 let fieldSize = 4;
 const board = initializeBoard(fieldSize, fieldSize) // 그냥 0으로 된 배열 생성. // @ 나중에 다시 볼 부분 
@@ -32,7 +33,6 @@ function initializeBoard(rows, cols) {
     }
     boardArray.push(row);
   }
-  console.log('initializeBoard : ',boardArray)
   return boardArray;
 }
 
@@ -46,7 +46,7 @@ function createTableID(rows, cols) {
     }
     tableID.push(row);
   }
-  console.log('tableID : ',tableID)
+  // console.log('tableID : ',tableID)
   return tableID;
 }
 
@@ -66,24 +66,6 @@ function createTableID(rows, cols) {
   fieldElement.appendChild(tableElement);
 })();
 
-// 키보드 입력 처리
-document.onkeydown = keyDownEventHandler;
-function keyDownEventHandler(e) {
-  switch (e.keyCode) {
-    case 38:
-      moveDir('up');
-      break; //'up'
-    case 40:
-      moveDir('down');
-      break; //down
-    case 37:
-      moveDir('left');
-      break; //left
-    case 39:
-      moveDir('right');
-      break; //right
-  }
-}
 
 // 초기값. 초기에 숫자가 생길 좌표선정, 스코어 초기화.
 (function initializeGame(initialFieldNumber) {
@@ -100,7 +82,7 @@ function keyDownEventHandler(e) {
     {board[x][y] = getInitialNum();}
     else 
     {i--} // @ 나중에 다시 볼 부분 
-    console.log('x:'+x+' y:'+y)
+    // console.log('x:'+x+' y:'+y)
   }
   update();
 })(initialFieldNumber);
@@ -217,6 +199,25 @@ function coloring(cell) {
   }
 }
 
+// 키보드 입력 처리
+document.onkeydown = keyDownEventHandler;
+function keyDownEventHandler(e) {
+  switch (e.keyCode) {
+    case 38:
+      moveDir('up');
+      break; //'up'
+    case 40:
+      moveDir('down');
+      break; //down
+    case 37:
+      moveDir('left');
+      break; //left
+    case 39:
+      moveDir('right');
+      break; //right
+  }
+}
+
 // 보드판 이동 방향에 따른 회전 컨트롤
 function moveDir(opt) {
   switch (opt) {
@@ -244,12 +245,12 @@ function moveDir(opt) {
 
 // 보드판 이동
 function move() {
-  let isMoved = false;
+  let isMoved = false; // 이동추적. 
   // let isPlused = Array(Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0));
   let isPlused = initializeBoard(fieldSize, fieldSize);
   for (let i = 1; i < fieldSize; i++) {
     for (let j = 0; j < fieldSize; j++) {
-      if (board[i][j] == 0) continue;
+      if (board[i][j] === 0) continue;
       let tempY = i - 1;
       while (tempY > 0 && board[tempY][j] == 0) tempY--;
       if (board[tempY][j] == 0) {
@@ -276,13 +277,13 @@ function move() {
       }
     }
   }
-  if (isMoved) generate();
-  else checkGameOver();
+  if (isMoved) generate(); // 이동추적된 isMoved가 true일때 generate함수실행.
+  else checkGameOver(); // 이동안되면 게임오버
 }
 
 // 보드판 회전
 function rotate(n) {
-  while (n--) {
+  while (n--) { // while(n--)문 : n번만큼 실행.
     // let tempBoard = Array(Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0));
     let tempBoard = initializeBoard(fieldSize, fieldSize);
     for (let i = 0; i < fieldSize; i++)
@@ -290,34 +291,38 @@ function rotate(n) {
         tempBoard[i][j] = board[i][j];
     for (let i = 0; i < fieldSize; i++)
       for (let j = 0; j < fieldSize; j++)
-        board[j][fieldSize - 1 - i] = tempBoard[i][j];
+        board[j][fieldSize - 1 - i] = tempBoard[i][j]; // @ fieldSize - 1 ? 
 
   }
 }
 
 
 // 신규 숫자 생성
-function generate() {
-  let zeroNum = 0;
-  for (let i = 0; i < fieldSize; i++)
-    for (let j = 0; j < fieldSize; j++)
-      if (board[i][j] == 0)
+// 반복문, 조건문 다음의 한줄은 {} 생략가능. But 아직 헷갈리니까 써주자.
+function generate() { 
+  let zeroNum = 0; // 빈셀의 개수 계산
+  for (let i = 0; i < fieldSize; i++) {
+    for (let j = 0; j < fieldSize; j++) {
+      if (board[i][j] === 0) {
         zeroNum++;
-  while (true) {
+      }
+    }
+  }
+  while (true) { // @ return문이 실행되지 않는한 무한루프(무한실행)
     for (let i = 0; i < fieldSize; i++) {
       for (let j = 0; j < fieldSize; j++) {
-        if (board[i][j] == 0) {
+        if (board[i][j] === 0) {
           let rand = parseInt(Math.random() * zeroNum);
-          if (rand == 0) {
-            board[i][j] = getInitialNum();
-            return;
+          if (rand === 0) {
+            board[i][j] = getInitialNum(); // @ 
+            // return 문은 함수 실행을 종료하고, 주어진 값을 함수호출 지점(함수실행부분)으로 반환합니다.
+            return; // 반환값 없이 return만 쓰면 그 지점에서 함수 중단. while문의 무한루프를 방지함.
           }
         }
       }
     }
   }
 }
-
 
 // 최대 점수 반환
 function getMaxNum() {
