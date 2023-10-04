@@ -283,7 +283,7 @@ function move() {
 
 // 보드판 회전
 function rotate(n) {
-  while (n--) { // while(n--)문 : n번만큼 실행.
+  while (n--) { // while(n--)문 : n번만큼 실행. 그 이유는 JS는 0은 boolean 변환시 false취급하기 때문. 내 티스토리 확인하기.
     // let tempBoard = Array(Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0));
     let tempBoard = initializeBoard(fieldSize, fieldSize);
     for (let i = 0; i < fieldSize; i++)
@@ -296,9 +296,14 @@ function rotate(n) {
   }
 }
 
+function tempTest(n){
+  while(n--){
+  console.log(n,"회차 실행")
+}}
+tempTest(5)
 
 // 신규 숫자 생성
-// 반복문, 조건문 다음의 한줄은 {} 생략가능. But 아직 헷갈리니까 써주자.
+// 반복문, 조건문 다음의 한줄은 {} 생략가능. But 아직은 헷갈리니까 써주자.
 function generate() { 
   let zeroNum = 0; // 빈셀의 개수 계산
   for (let i = 0; i < fieldSize; i++) {
