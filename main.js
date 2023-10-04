@@ -219,31 +219,34 @@ function keyDownEventHandler(e) {
 }
 
 // 보드판 이동 방향에 따른 회전 컨트롤
+// move() : 위로 올리기
+// rotate(n) : 시계방향 90*n도 회전
 function moveDir(opt) {
   switch (opt) {
     case 'up':
       move();
-      break; //up
+      break; 
     case 'down':
       rotate(2);
       move();
       rotate(2);
-      break; //down
+      break; 
     case 'left':
       rotate(1);
       move();
       rotate(3);
-      break; //left
+      break; 
     case 'right':
       rotate(3);
       move();
       rotate(1);
-      break; //right
+      break;
   }
   update();
 }
 
 // 보드판 이동
+// move() 자체가 단순히 위로 올리는 기능.
 function move() {
   let isMoved = false; // 이동추적. 
   // let isPlused = Array(Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0));
@@ -282,6 +285,7 @@ function move() {
 }
 
 // 보드판 회전
+// rotate(n) : 시계방향 90*n도 회전
 function rotate(n) {
   while (n--) { // while(n--)문 : n번만큼 실행. 그 이유는 JS는 0은 boolean 변환시 false취급하기 때문. 내 티스토리 확인하기.
     // let tempBoard = Array(Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0), Array(0, 0, 0, 0));
@@ -291,16 +295,9 @@ function rotate(n) {
         tempBoard[i][j] = board[i][j];
     for (let i = 0; i < fieldSize; i++)
       for (let j = 0; j < fieldSize; j++)
-        board[j][fieldSize - 1 - i] = tempBoard[i][j]; // @ fieldSize - 1 ? 
-
+        board[j][fieldSize - 1 - i] = tempBoard[i][j]; // @ fieldSize - 1 ?
   }
 }
-
-function tempTest(n){
-  while(n--){
-  console.log(n,"회차 실행")
-}}
-tempTest(5)
 
 // 신규 숫자 생성
 // 반복문, 조건문 다음의 한줄은 {} 생략가능. But 아직은 헷갈리니까 써주자.
@@ -362,7 +359,7 @@ function checkGameOver() {
 
 // 게임오버 처리
 function gameover() {
-  alert("[Game Over]\nMax: " + getMaxNum() + "\nScore" + score);
+  alert("[Game Over]\nMaxNumber : " + getMaxNum() + "\nScore : " + score);
   init();
 }
 
